@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livestock_app/signup.dart';
-import 'loginPage.dart';
+import 'login_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key, this.title});

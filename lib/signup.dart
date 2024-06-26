@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../src/MyContainer.dart';
-import 'loginPage.dart';
+import 'login_page.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -38,6 +38,23 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  String _selectedRole = 'Farmer';
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  // Common fields
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // Farmer specific fields
+  final TextEditingController _farmNameController = TextEditingController();
+
+  // Buyer specific fields
+  final TextEditingController _companyNameController = TextEditingController();
+
+  // Driver specific fields
+  final TextEditingController _licenseNumberController = TextEditingController();
+
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -59,7 +76,8 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
+  Widget _entryField(String title, TextEditingController controller,
+      {bool isPassword = false}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -73,6 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
             height: 10,
           ),
           TextField(
+              controller: controller,
               obscureText: isPassword,
               decoration: const InputDecoration(
                   border: InputBorder.none,
@@ -84,26 +103,35 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _submitButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.grey.shade200,
-                offset: const Offset(2, 4),
-                blurRadius: 5,
-                spreadRadius: 2)
-          ],
-          gradient: const LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-      child: const Text(
-        'Register Now',
-        style: TextStyle(fontSize: 20, color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        if (_formKey.currentState!.validate()) {
+          // Handle form submission
+          // You can use different controllers based on the role
+          print("Form Submitted");
+        }
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: const Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+            gradient: const LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+        child: const Text(
+          'Register Now',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
     );
   }
@@ -166,9 +194,15 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Username"),
-        _entryField("Email id"),
-        _entryField("Password", isPassword: true),
+        _entryField("Username", _usernameController),
+        _entryField("Email id", _emailController),
+        _entryField("Password", _passwordController, isPassword: true),
+        if (_selectedRole == 'Farmer')
+          _entryField("Farm Name", _farmNameController),
+        if (_selectedRole == 'Buyer')
+          _entryField("Company Name", _companyNameController),
+        if (_selectedRole == 'Driver')
+          _entryField("License Number", _licenseNumberController),
       ],
     );
   }
@@ -197,6 +231,43 @@ class _SignUpPageState extends State<SignUpPage> {
                     _title(),
                     const SizedBox(
                       height: 50,
+                    ),
+                    DropdownButton<String>(
+                      value: _selectedRole,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedRole = newValue!;
+                        });
+                      },
+                      
+                      items: <String>['Farmer', 'Buyer', 'Driver']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: _selectedRole == value
+                                  ? Colors.orange.withOpacity(0.1)
+                                  : Colors.white,
+                              border: Border.all(color: Colors.orange),
+                            ),
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                color: _selectedRole == value
+                                    ? Colors.orange
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(
+                      height: 20,
                     ),
                     _emailPasswordWidget(),
                     const SizedBox(

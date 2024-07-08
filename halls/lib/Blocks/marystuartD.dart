@@ -29,7 +29,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
               onPressed: () {
                 
               },
-              child: const Text("ROOM 1"),
+              child: const Text("D1"),
             ),
             const SizedBox(
               height: 10,
@@ -38,7 +38,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
               onPressed: () {
           
               },
-              child: const Text("ROOM 2"),
+              child: const Text("D2"),
             ),
             const SizedBox(
               height: 10,
@@ -46,7 +46,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
             TextButton(
               onPressed: () {
               },
-              child: const Text("ROOM 3"),
+              child: const Text("D3"),
             ),
             const SizedBox(
               height: 10,
@@ -55,7 +55,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
               onPressed: () {
         
               },
-              child: const Text("ROOM 4"),
+              child: const Text("D4"),
             ),
             const SizedBox(
               height: 10,
@@ -64,7 +64,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
               onPressed: () {
                 
               },
-              child: const Text("ROOM 5"),
+              child: const Text("D5"),
             ),
             const SizedBox(
               height: 10,
@@ -73,7 +73,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
               onPressed: () {
                 
               },
-              child: const Text("ROOM 6"),
+              child: const Text("D6"),
             ),
             const SizedBox(
               height: 10,
@@ -82,7 +82,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
               onPressed: () {
                 
               },
-              child: const Text("ROOM 7"),
+              child: const Text("D7"),
             ),
             const SizedBox(
               height: 10,
@@ -90,7 +90,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
             TextButton(
               onPressed: () {
               },
-              child: const Text("ROOM 8"),
+              child: const Text("D8"),
             ),
             const SizedBox(
               height: 10,
@@ -99,7 +99,7 @@ class _BlockDRoomsState extends State<BlockDRooms> {
               onPressed: () {
               
               },
-              child: const Text("ROOM 9"),
+              child: const Text("D9"),
             ),
              const SizedBox(
               height: 10,
@@ -108,63 +108,12 @@ class _BlockDRoomsState extends State<BlockDRooms> {
               onPressed: () {
               
               },
-              child: const Text("ROOM 10"),
+              child: const Text("D10"),
             ),
             const SizedBox(
               height: 10,
             ),
-            TextButton(
-              onPressed: () {
-              
-              },
-              child: const Text("ROOM 11"),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-              onPressed: () {
-              
-              },
-              child: const Text("ROOM 12"),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-              onPressed: () {
-              
-              },
-              child: const Text("ROOM 13"),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-              onPressed: () {
-              
-              },
-              child: const Text("ROOM 14"),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-              onPressed: () {
-              
-              },
-              child: const Text("ROOM 15"),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-              onPressed: () {
-              
-              },
-              child: const Text("ROOM 16"),
-            ),
-
+            
           ],
         ),
       ),

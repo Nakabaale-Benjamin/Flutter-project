@@ -2,9 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'login.dart'; // Import your login screen
-import 'room_allocation_service.dart'; // Import your hall allocation service
 import 'student_model.dart'; // Import your Student model
-import 'roomallocation_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,17 +15,19 @@ void main() async {
   List<Student> studentsData = [
     Student(
       id: '1', // Replace with actual Firestore document ID or unique identifier
+      firstName: 'John', 
+      lastName: 'Doe',
+      cgpa: 3,
+      uacePoints: null,
       isAttachedToHall: true,
       isGovernmentStudent: true,
       isDisabled: true,
-      cgpa: 3,
-      uacePoints: null,
       isContinuingResident: true,
-      isPrivateStudent: true,
+      isPrivateStudent: true, // Add this line
       isFresher: false, 
-      firstName: '', 
-      lastName: '',
+      gender: 'male', // Add gender
       roomNumber: null, // Make sure to include roomNumber if it's part of the constructor
+      roomId: null, // Add roomId if needed
     ),
     // Add more students as needed
   ];
@@ -51,7 +51,6 @@ class MyApp extends StatelessWidget {
       // Example of how you might add routes for navigation
       routes: {
         '/login': (context) => const LoginScreen(),
-        '/roomAllocation': (context) => RoomAllocationScreen(),
         // Add more routes as needed
       },
     );

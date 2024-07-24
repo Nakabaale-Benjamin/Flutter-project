@@ -82,15 +82,6 @@ class _HallState extends State<Hall> {
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
-              SizedBox(
-                  height: 300,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: _images.length,
-                    itemBuilder: (context, index) {
-                      return Image.asset(_images[index]);
-                    },
-                  )),
               Container(
                 color: Colors.green,
                 child: SizedBox(
@@ -109,6 +100,16 @@ class _HallState extends State<Hall> {
                           : const Text(" No user name specified")),
                 ),
               ),
+              SizedBox(
+                  height: 300,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _images.length,
+                    itemBuilder: (context, index) {
+                      return Image.asset(_images[index]);
+                    },
+                  )),
+              
               Container(
                 color: Colors.green,
                 child: const SizedBox(

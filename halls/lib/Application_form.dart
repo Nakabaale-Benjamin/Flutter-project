@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'hall.dart';
-import 'roomallocation_screen.dart';
+
 
 
 
@@ -14,8 +14,7 @@ class Student extends StatefulWidget {
 
 class _StudentState extends State<Student> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _sexController = TextEditingController();
   final TextEditingController _registrationController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -40,8 +39,7 @@ class _StudentState extends State<Student> {
     
     try {
       await FirebaseFirestore.instance.collection('students').add({
-        'firstName': _firstNameController.text,
-        'lastName': _lastNameController.text,
+        'fullName': _fullNameController.text,
         'sex': _sexController.text,
         'registrationNumber': _registrationController.text,
         'email': _emailController.text,
@@ -57,11 +55,7 @@ class _StudentState extends State<Student> {
       });
       
       // Navigate to the next screen after successful submission
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (BuildContext context) {
-          return  RoomAllocationScreen();
-        }),
-      );
+      
       
     } catch (e) {
       print('Error saving to Firestore: $e');
@@ -93,54 +87,53 @@ class _StudentState extends State<Student> {
             child: Column(
               children: [
                 TextFormField(
-                  controller: _firstNameController,
+                  controller: _fullNameController,
                   decoration: const InputDecoration(
-                    labelText: 'First Name',
-                    hintText: 'Enter your given name',
+                    labelText: 'Full Name',
+                    hintText: 'Enter your full name',
                     labelStyle: TextStyle(fontSize: 16, color: Colors.black),
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your first name';
+                      return 'Please enter your full name';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: _lastNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Last Name',
-                    hintText: "Your Surname name",
-                    labelStyle: TextStyle(fontSize: 16, color: Colors.black),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your last name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _sexController,
+                
+                DropdownButtonFormField<String>(
+                  value: _sexController.text.isNotEmpty ? _sexController.text : null,
                   decoration: const InputDecoration(
                     labelText: 'Sex',
                     hintText: "Your sex",
                     labelStyle: TextStyle(fontSize: 16, color: Colors.black),
                     border: OutlineInputBorder(),
                   ),
+                  items: [
+                    DropdownMenuItem(
+                      value: 'Female',
+                      child: Text('Female'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Male',
+                      child: Text('Male'),
+                    ),
+                  ],
+                  onChanged: (String? newValue) {
+                    _sexController.text = newValue ?? '';
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your sex';
+                      return 'Please select your sex';
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+
+                
                 TextFormField(
                   controller: _registrationController,
                   decoration: const InputDecoration(
@@ -292,25 +285,25 @@ class _StudentState extends State<Student> {
                   },
                 ),
                 const SizedBox(height: 16),
-                SwitchListTile(
-                  title: const Text('Has Disability'),
+                CheckboxListTile(
+                  title: const Text('Disability'),
                   value: _hasDisability,
-                  onChanged: (newValue) {
+                  onChanged: (bool? value) {
                     setState(() {
-                      _hasDisability = newValue;
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  title: const Text('Continuing Resident'),
-                  value: _isContinuingResident,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _isContinuingResident = newValue;
+                      _hasDisability = value ?? false;
                     });
                   },
                 ),
                 const SizedBox(height: 16),
+                CheckboxListTile(
+                  title: const Text('Continuing Resident'),
+                  value: _isContinuingResident,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isContinuingResident = value ?? false;
+                    });
+                  },
+                ),
                
                 
                   ElevatedButton(

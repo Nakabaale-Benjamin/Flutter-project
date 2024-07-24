@@ -92,7 +92,7 @@ class _HallState extends State<Hall> {
                     },
                   )),
               Container(
-                color: Colors.lightGreenAccent[700],
+                color: Colors.green,
                 child: SizedBox(
                   height: 50,
                   child: Center(
@@ -100,7 +100,7 @@ class _HallState extends State<Hall> {
                           ? Text(
                               'Hi:  ${_user?.displayName ?? 'No name provided'}',
                               style: const TextStyle(
-                                fontSize: 40,
+                                fontSize: 30,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
@@ -110,7 +110,7 @@ class _HallState extends State<Hall> {
                 ),
               ),
               Container(
-                color: Colors.lightGreenAccent[700],
+                color: Colors.green,
                 child: const SizedBox(
                     height: 90,
                     child: Center(
@@ -132,7 +132,7 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "Nkrumah",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -158,7 +158,8 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "Livingstone",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25
+                    ,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -185,7 +186,7 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "Mitchell",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -212,7 +213,7 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "Nsibirwa",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -239,7 +240,7 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "University Hall",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -266,7 +267,7 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "Lumumba",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -293,7 +294,7 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "Africa",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -320,7 +321,7 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "Complex",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -347,7 +348,7 @@ class _HallState extends State<Hall> {
                 child: const Text(
                   "Mary Stuart",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),

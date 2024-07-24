@@ -32,26 +32,16 @@ class AuthMethod {
   }
 
   // Log in user
-  Future<String> loginUser({
-    required String email,
-    required String password,
-  }) async {
-    String res = "Some error occurred";
+  Future<String> loginUser({required String email, required String password}) async {
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
-        // Logging in user with email and password
-        await _auth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        res = "success";
-      } else {
-        res = "Please enter all the fields";
-      }
-    } catch (err) {
-      res = err.toString();
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User? user = userCredential.user;
+      return user?.uid ?? "error";
+    } catch (e) {
+      print('Error logging in: $e');
+      return "error";
     }
-    return res;
   }
 
   // Sign out user

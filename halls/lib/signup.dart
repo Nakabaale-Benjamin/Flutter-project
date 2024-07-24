@@ -60,10 +60,9 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: SizedBox(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -112,6 +111,6 @@ class _SignupScreenState extends State<SignupScreen> {
           ],
         ),
       )),
-    ));
+    );
   }
 }

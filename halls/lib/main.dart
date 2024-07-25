@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'login.dart'; // Import your login screen
 import 'student_model.dart'; // Import your Student model
+import 'submissionsuccessScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +52,9 @@ class MyApp extends StatelessWidget {
       // Example of how you might add routes for navigation
       routes: {
         '/login': (context) => const LoginScreen(),
-        // Add more routes as needed
+         '/success': (context) => SubmissionSuccessScreen(
+              studentName: ModalRoute.of(context)!.settings.arguments as String,
+            ),
       },
     );
   }

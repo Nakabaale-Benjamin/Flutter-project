@@ -1,17 +1,18 @@
-import "package:cloud_firestore/cloud_firestore.dart";
-class Halls{
-  String id;
-  int bedspace;
-  int rooms;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Halls({required this.id, required this.bedspace, required this.rooms});
+class Hall {
+  final String id;
+  final int bedspace;
+  final int rooms;
 
-  factory Halls.fromFirestore(DocumentSnapshot doc) {
+  Hall({required this.id, required this.bedspace, required this.rooms});
+
+  factory Hall.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
-    return Halls(
+    return Hall(
       id: doc.id,
-      bedspace: data['bedspace'] as int,
-      rooms: data['rooms'] as int,
+      bedspace: data['bedspace'] ?? 0,
+      rooms: data['rooms'] ?? 0,
     );
   }
 
@@ -21,4 +22,14 @@ class Halls{
       'rooms': rooms,
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Hall &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

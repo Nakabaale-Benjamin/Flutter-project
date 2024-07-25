@@ -1,10 +1,83 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'hall.dart';
+import 'hall.dart'; // Imported to handle navigation after form submission
 
+// Create a new class for the success screen
+class SubmissionSuccessScreen extends StatelessWidget {
+  final String studentName;
 
+  const SubmissionSuccessScreen({super.key, required this.studentName});
 
-
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text("Submission Successful"),
+        backgroundColor: Colors.green,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 100,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Thank you, $studentName!',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Your form has been successfully submitted.',
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 15),
+              const Text(
+                'Please wait for the room allocation results.',
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+             ElevatedButton(
+                onPressed: () {
+                  // Navigate to the Hall screen
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Hall(),
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text(
+                    'Back to Home',
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 class Student extends StatefulWidget {
   const Student({super.key});
 
@@ -18,52 +91,64 @@ class _StudentState extends State<Student> {
   final TextEditingController _sexController = TextEditingController();
   final TextEditingController _registrationController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _yearOfStudyController = TextEditingController();
   final TextEditingController _collegeController = TextEditingController();
   final TextEditingController _hallOfAttachmentController = TextEditingController();
   String _studentType = 'Fresher';  // Default value
   String? _points;
   String? _cgpa;
 
-  String? _selectedStudentType; // Initialize as null
+  String? _selectedStudentType;
+  String? _selectedYearOfStudyValue;  // Renamed to avoid conflict
+  String? _selectedCollege;
   bool _hasDisability = false;
   bool _isContinuingResident = false;
 
+  // Updated _submitForm method to handle form submission and navigate to success screen
   void _submitForm() async {
-  if (_formKey.currentState!.validate()) {
-    _formKey.currentState!.save();
-    
-    // Ensure _points and _cgpa are correctly populated
-    print('_points: $_points');
-    print('_cgpa: $_cgpa');
-    
-    try {
-      await FirebaseFirestore.instance.collection('students').add({
-        'fullName': _fullNameController.text,
-        'sex': _sexController.text,
-        'registrationNumber': _registrationController.text,
-        'email': _emailController.text,
-        'yearOfStudy': _yearOfStudyController.text,
-        'college': _collegeController.text,
-        'hallOfAttachment': _hallOfAttachmentController.text,
-        'studentType': _selectedStudentType,
-        'points': _points ?? '',
-        'cgpa': _cgpa ?? '',
-        'hasDisability': _hasDisability,
-        'isContinuingResident': _isContinuingResident,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-      
-      // Navigate to the next screen after successful submission
-      
-      
-    } catch (e) {
-      print('Error saving to Firestore: $e');
-      // Handle error as needed
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      // Ensure _points and _cgpa are correctly populated
+      print('_points: $_points');
+      print('_cgpa: $_cgpa');
+
+      try {
+        await FirebaseFirestore.instance.collection('students').add({
+          'fullName': _fullNameController.text,
+          'sex': _sexController.text,
+          'registrationNumber': _registrationController.text,
+          'email': _emailController.text,
+          'yearOfStudy': _selectedYearOfStudyValue,  // Use renamed variable
+          'college': _selectedCollege,
+          'hallOfAttachment': _hallOfAttachmentController.text,
+          'studentType': _selectedStudentType,
+          'points': _points ?? '',
+          'cgpa': _cgpa ?? '',
+          'hasDisability': _hasDisability,
+          'isContinuingResident': _isContinuingResident,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        // Navigate to the success screen after successful submission
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SubmissionSuccessScreen(
+              studentName: _fullNameController.text,
+            ),
+          ),
+        );
+      } catch (e) {
+        print('Error saving to Firestore: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving to Firestore: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -132,12 +217,12 @@ class _StudentState extends State<Student> {
                     return null;
                   },
                 ),
-
+                const SizedBox(height: 16),
                 
                 TextFormField(
                   controller: _registrationController,
                   decoration: const InputDecoration(
-                    labelText: 'Registration Number',
+                    labelText: 'Registration Number e.g 23/U/11071/ps',
                     hintText: "Your University Reg no.",
                     labelStyle: TextStyle(fontSize: 16, color: Colors.black),
                     border: OutlineInputBorder(),
@@ -170,54 +255,96 @@ class _StudentState extends State<Student> {
                   },
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: _yearOfStudyController,
+                DropdownButtonFormField<String>(
+                  value: _selectedYearOfStudyValue,  // Use renamed variable
                   decoration: const InputDecoration(
                     labelText: 'Year of Study',
                     hintText: "Your year of study e.g Year 1",
                     labelStyle: TextStyle(fontSize: 16, color: Colors.black),
                     border: OutlineInputBorder(),
                   ),
+                  items: [
+                    DropdownMenuItem(value: 'Year 1', child: Text('Year 1')),
+                    DropdownMenuItem(value: 'Year 2', child: Text('Year 2')),
+                    DropdownMenuItem(value: 'Year 3', child: Text('Year 3')),
+                    DropdownMenuItem(value: 'Year 4', child: Text('Year 4')),
+                    DropdownMenuItem(value: 'Year 5', child: Text('Year 5')),
+                  ],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedYearOfStudyValue = newValue;
+                    });
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your year of study';
+                      return 'Please select your year of study';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: _collegeController,
+                
+                DropdownButtonFormField<String>(
+                  value: _selectedCollege,
                   decoration: const InputDecoration(
                     labelText: 'College',
-                    hintText: "Name of your college",
+                    hintText: 'Select your college',
                     labelStyle: TextStyle(fontSize: 16, color: Colors.black),
                     border: OutlineInputBorder(),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your College name';
-                    }
-                    return null;
+                  items: [
+                    DropdownMenuItem(value: 'CAES', child: Text('CAES')),
+                    DropdownMenuItem(value: 'COCIS', child: Text('CoCIS')),
+                    DropdownMenuItem(value: 'CHUSS', child: Text('CHUSS')),
+                    DropdownMenuItem(value: 'CEES', child: Text('CEES')),
+                    DropdownMenuItem(value: 'CEDAT', child: Text('CEDAT')),
+                    DropdownMenuItem(value: 'COBAMS', child: Text('COBAMS')),
+                    DropdownMenuItem(value: 'COVAB', child: Text('CoVAB')),
+                    DropdownMenuItem(value: 'COLAS', child: Text('CoLAS')),
+                    DropdownMenuItem(value: 'SOL', child: Text('SCHOOL OF LAW')),
+                  ],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedCollege = newValue;
+                    });
                   },
+                  validator: (value) => value == null || value.isEmpty ? 'Please select your college' : null,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: _hallOfAttachmentController,
+                
+                 DropdownButtonFormField<String>(
+                  value: _hallOfAttachmentController.text.isNotEmpty ? _hallOfAttachmentController.text : null,
                   decoration: const InputDecoration(
                     labelText: 'Hall Of Attachment',
-                    hintText: "Name of the hall you are attached to",
+                    hintText: "Select the hall you are attached to",
                     labelStyle: TextStyle(fontSize: 16, color: Colors.black),
                     border: OutlineInputBorder(),
                   ),
+                  items: [
+                    DropdownMenuItem(value: 'Africa', child: Text('Africa')),
+                    DropdownMenuItem(value: 'Mary Stuart', child: Text('Mary Stuart')),
+                    DropdownMenuItem(value: 'Compex', child: Text('Compex')),
+                    DropdownMenuItem(value: 'Nkrumah', child: Text('Nkrumah')),
+                    DropdownMenuItem(value: 'Lumumba', child: Text('Lumumba')),
+                    DropdownMenuItem(value: 'Livingstone', child: Text('Livingstone')),
+                    DropdownMenuItem(value: 'Mitchell', child: Text('Mitchell')),
+                    DropdownMenuItem(value: 'University Hall', child: Text('University Hall')),
+                    DropdownMenuItem(value: 'Nsibirwa', child: Text('Nsibirwa')),
+                  ],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _hallOfAttachmentController.text = newValue ?? '';
+                    });
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your Hall of attachment';
+                      return 'Please select your hall of attachment';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
+                
                 DropdownButtonFormField<String>(
                   value: _studentType,
                   decoration: const InputDecoration(
@@ -269,8 +396,8 @@ class _StudentState extends State<Student> {
                   },
                   items: const [
                     DropdownMenuItem(
-                        value: 'Government', child: Text('Government')),
-                    DropdownMenuItem(value: 'Private', child: Text('Private')),
+                        value: 'Government', child: Text('Government Student')),
+                    DropdownMenuItem(value: 'Private', child: Text('Private Student')),
                   ],
                   decoration: const InputDecoration(
                     labelText: 'Student Type',
@@ -284,29 +411,31 @@ class _StudentState extends State<Student> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
-                CheckboxListTile(
-                  title: const Text('Disability'),
-                  value: _hasDisability,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _hasDisability = value ?? false;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                CheckboxListTile(
-                  title: const Text('Continuing Resident'),
-                  value: _isContinuingResident,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _isContinuingResident = value ?? false;
-                    });
-                  },
-                ),
-               
                 
-                  ElevatedButton(
+                CheckboxListTile(
+                  title: const Text('Do you have a disability?'),
+                  value: _hasDisability,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      _hasDisability = newValue ?? false;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                
+                CheckboxListTile(
+                  title: const Text('Are you a continuing resident?'),
+                  value: _isContinuingResident,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      _isContinuingResident = newValue ?? false;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Add Submit Button
+                ElevatedButton(
                   onPressed: () {
                     _submitForm();
                   },

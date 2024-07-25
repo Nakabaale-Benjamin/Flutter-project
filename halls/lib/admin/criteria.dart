@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:halls/admin/hall_update.dart';
 import 'package:halls/criteria_update.dart';
-
+import '../widget/button.dart';
 class Criteria extends StatefulWidget {
   const Criteria({super.key});
 
@@ -14,22 +14,27 @@ class _CriteriaState extends State<Criteria> {
   Widget build(BuildContext context) {
     return Scaffold(
     appBar: AppBar(title: const Text("UPDATE APP INFO"),),
-    body: Column(
-      children: [
-        TextButton(onPressed:  () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return  CriteriaScreen();
-                  }));
-                }, child: const Text("Update hall info")),
-                TextButton(onPressed:  () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return  EditHallScreen();
-                  }));
-                }, child: const Text("Manage info"))
-                 
-      ],
+    body: Center(
+      child: Column(
+        children: [
+          MyButtons(onTap:  () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (BuildContext context) {
+                      return  EditHallScreen();
+                    }));
+                  }, text: "Update hall info"),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  MyButtons(onTap:  () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (BuildContext context) {
+                      return  CriteriaScreen();
+                    }));
+                  }, text: "Manage Criteria info")
+                   
+        ],
+      ),
     ),
     );
   }

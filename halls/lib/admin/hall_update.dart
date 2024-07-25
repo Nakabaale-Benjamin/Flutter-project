@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'hall_model.dart';
 import '../widget/text_field.dart'; // Import your custom TextFieldInput widget
 import '../widget/button.dart';
-class EditHallScreen extends StatefulWidget {
+class HallsScreen extends StatefulWidget {
   @override
-  _EditHallScreenState createState() => _EditHallScreenState();
+  _HallsScreenState createState() => _HallsScreenState();
 }
 
-class _EditHallScreenState extends State<EditHallScreen> {
+class _HallsScreenState extends State<HallsScreen> {
   Hall? _selectedHall;
   final TextEditingController _bedspaceController = TextEditingController();
   final TextEditingController _roomsController = TextEditingController();

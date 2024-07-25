@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../widget/button.dart';
 
 class Criterias {
   int attachmentToHall;
@@ -55,11 +54,11 @@ class Criterias {
   void calculateTotalPoints() {
     int cgpaPoints = cgpa >= 3.5 ? 20 : 0;
     totalPoints = attachmentToHall +
-        governmentStudent +
-        disabled +
-        cgpaPoints +
-        continuingResident +
-        privateStudent;
+                  governmentStudent +
+                  disabled +
+                  cgpaPoints +
+                  continuingResident +
+                  privateStudent;
   }
 }
 
@@ -74,17 +73,13 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
   final _formKey = GlobalKey<FormState>();
   late Criterias _criteria;
 
-  final TextEditingController _attachmentToHallController =
-      TextEditingController();
-  final TextEditingController _governmentStudentController =
-      TextEditingController();
+  final TextEditingController _attachmentToHallController = TextEditingController();
+  final TextEditingController _governmentStudentController = TextEditingController();
   final TextEditingController _disabledController = TextEditingController();
   final TextEditingController _cgpaController = TextEditingController();
   final TextEditingController _uaceController = TextEditingController();
-  final TextEditingController _continuingResidentController =
-      TextEditingController();
-  final TextEditingController _privateStudentController =
-      TextEditingController();
+  final TextEditingController _continuingResidentController = TextEditingController();
+  final TextEditingController _privateStudentController = TextEditingController();
   final TextEditingController _totalPointsController = TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -98,21 +93,16 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
 
   Future<void> _loadCriteria() async {
     try {
-      DocumentSnapshot snapshot =
-          await _firestore.collection(_collection).doc('current').get();
+      DocumentSnapshot snapshot = await _firestore.collection(_collection).doc('current').get();
       if (snapshot.exists) {
         setState(() {
-          _criteria =
-              Criterias.fromMap(snapshot.data() as Map<String, dynamic>);
-          _attachmentToHallController.text =
-              _criteria.attachmentToHall.toString();
-          _governmentStudentController.text =
-              _criteria.governmentStudent.toString();
+          _criteria = Criterias.fromMap(snapshot.data() as Map<String, dynamic>);
+          _attachmentToHallController.text = _criteria.attachmentToHall.toString();
+          _governmentStudentController.text = _criteria.governmentStudent.toString();
           _disabledController.text = _criteria.disabled.toString();
           _cgpaController.text = _criteria.cgpa.toString();
           _uaceController.text = _criteria.uace.toString();
-          _continuingResidentController.text =
-              _criteria.continuingResident.toString();
+          _continuingResidentController.text = _criteria.continuingResident.toString();
           _privateStudentController.text = _criteria.privateStudent.toString();
           _totalPointsController.text = _criteria.totalPoints.toString();
         });
@@ -144,8 +134,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
         disabled: int.tryParse(_disabledController.text) ?? 0,
         cgpa: double.tryParse(_cgpaController.text) ?? 0.0,
         uace: double.tryParse(_uaceController.text) ?? 0.0,
-        continuingResident:
-            int.tryParse(_continuingResidentController.text) ?? 0,
+        continuingResident: int.tryParse(_continuingResidentController.text) ?? 0,
         privateStudent: int.tryParse(_privateStudentController.text) ?? 0,
       );
       _criteria.calculateTotalPoints();
@@ -158,10 +147,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
       _calculateAndUpdateTotalPoints();
 
       try {
-        await _firestore
-            .collection(_collection)
-            .doc('current')
-            .set(_criteria.toMap());
+        await _firestore.collection(_collection).doc('current').set(_criteria.toMap());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Criteria updated successfully')),
         );
@@ -198,13 +184,10 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
             children: [
               TextFormField(
                 controller: _attachmentToHallController,
-                decoration:
-                    const InputDecoration(labelText: 'Attachment to Hall'),
+                decoration: const InputDecoration(labelText: 'Attachment to Hall'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      int.tryParse(value) == null) {
+                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   return null;
@@ -213,13 +196,10 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
               ),
               TextFormField(
                 controller: _governmentStudentController,
-                decoration:
-                    const InputDecoration(labelText: 'Government Student'),
+                decoration: const InputDecoration(labelText: 'Government Student'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      int.tryParse(value) == null) {
+                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   return null;
@@ -231,9 +211,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 decoration: const InputDecoration(labelText: 'Disabled'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      int.tryParse(value) == null) {
+                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   return null;
@@ -245,9 +223,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 decoration: const InputDecoration(labelText: 'CGPA'),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      double.tryParse(value) == null) {
+                  if (value == null || value.isEmpty || double.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   return null;
@@ -259,9 +235,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 decoration: const InputDecoration(labelText: 'UACE'),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      double.tryParse(value) == null) {
+                  if (value == null || value.isEmpty || double.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   return null;
@@ -270,13 +244,10 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
               ),
               TextFormField(
                 controller: _continuingResidentController,
-                decoration:
-                    const InputDecoration(labelText: 'Continuing Resident'),
+                decoration: const InputDecoration(labelText: 'Continuing Resident'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      int.tryParse(value) == null) {
+                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   return null;
@@ -288,9 +259,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 decoration: const InputDecoration(labelText: 'Private Student'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      int.tryParse(value) == null) {
+                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   return null;
@@ -303,14 +272,15 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 readOnly: true,
               ),
               const SizedBox(height: 20),
-              MyButtons(
-                onTap: _updateCriteria,
-                text: 'Update Criteria',
+              ElevatedButton(
+                onPressed: _updateCriteria,
+                child: const Text('Update Criteria'),
               ),
               const SizedBox(height: 20),
-              MyButtons(
-                onTap: _deleteCriteria,
-                text: 'Delete Criteria',
+              ElevatedButton(
+                onPressed: _deleteCriteria,
+                child: const Text('Delete Criteria'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               ),
             ],
           ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:halls/services/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Application_form.dart';
-import "login.dart";
+import 'login.dart';
 import 'profile.dart';
 import 'NavBar.dart';
 

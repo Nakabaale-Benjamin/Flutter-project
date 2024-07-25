@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:halls/hall.dart';
+import 'package:halls/profile.dart';
 
 
 class NavBar extends StatefulWidget {
@@ -43,7 +44,13 @@ class _NavBarState extends State<NavBar> {
         ListTile(
   leading: Icon(Icons.person),
   title: Text('Profile'),
-  onTap: () => null,
+              onTap: () {
+              Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext context) {
+                  return const ProfilePage
+                  ();
+                }));
+            },
 ),
           ListTile(
             leading: Icon(Icons.notifications),
@@ -65,17 +72,7 @@ class _NavBarState extends State<NavBar> {
             ),
           ),
           Divider(),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () => null,
-          ),
-          ListTile(
-            leading: Icon(Icons.share),
-            title: Text('Share'),
-            onTap: () => null,
-          ),
-          Divider(),
+         
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Exit'),

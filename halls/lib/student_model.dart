@@ -7,7 +7,7 @@ class Student {
   String? lastName;
   String? gender;
   String? hall;
-  int? roomNumber; // Change to int
+  int? roomNumber; 
   String? roomId;
   bool isGovernmentStudent;
   bool isDisabled;
@@ -24,7 +24,7 @@ class Student {
     this.lastName,
     this.gender,
     this.hall,
-    this.roomNumber, // Change to int
+    this.roomNumber, 
     this.roomId,
     required this.isGovernmentStudent,
     required this.isDisabled,

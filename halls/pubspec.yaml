@@ -10,6 +10,8 @@ dependencies:
   flutter_native_splash: ^2.4.0 
   flutter:
     sdk: flutter
+  flutter_admin_scaffold: ^1.3.0  # Add this line for flutter_admin_scaffold
+  flutter_riverpod: ^2.5.1       # Add this line for flutter_riverpod
   get:  
 
   cloud_firestore: ^5.1.0

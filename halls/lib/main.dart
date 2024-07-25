@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'login.dart'; // Import your login screen
 import 'student_model.dart'; // Import your Student model
 import 'submissionsuccessScreen.dart';
@@ -32,8 +33,8 @@ void main() async {
     ),
     // Add more students as needed
   ];
-  
-  runApp(MyApp(studentsData: studentsData));
+
+  runApp(ProviderScope(child: MyApp(studentsData: studentsData)));
 }
 
 class MyApp extends StatelessWidget {

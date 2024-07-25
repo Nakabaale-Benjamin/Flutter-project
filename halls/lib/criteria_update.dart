@@ -173,8 +173,9 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Criteria'),
+        title: const Text('Criteria Details'),
         backgroundColor: Colors.green,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -184,7 +185,10 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
             children: [
               TextFormField(
                 controller: _attachmentToHallController,
-                decoration: const InputDecoration(labelText: 'Attachment to Hall'),
+                decoration: const InputDecoration(
+                  labelText: 'Attachment to Hall',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty || int.tryParse(value) == null) {
@@ -194,9 +198,13 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 },
                 onChanged: (value) => _calculateAndUpdateTotalPoints(),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _governmentStudentController,
-                decoration: const InputDecoration(labelText: 'Government Student'),
+                decoration: const InputDecoration(
+                  labelText: 'Government Student',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty || int.tryParse(value) == null) {
@@ -206,9 +214,13 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 },
                 onChanged: (value) => _calculateAndUpdateTotalPoints(),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _disabledController,
-                decoration: const InputDecoration(labelText: 'Disabled'),
+                decoration: const InputDecoration(
+                  labelText: 'Disabled',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty || int.tryParse(value) == null) {
@@ -218,9 +230,13 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 },
                 onChanged: (value) => _calculateAndUpdateTotalPoints(),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _cgpaController,
-                decoration: const InputDecoration(labelText: 'CGPA'),
+                decoration: const InputDecoration(
+                  labelText: 'CGPA',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty || double.tryParse(value) == null) {
@@ -230,9 +246,13 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 },
                 onChanged: (value) => _calculateAndUpdateTotalPoints(),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _uaceController,
-                decoration: const InputDecoration(labelText: 'UACE'),
+                decoration: const InputDecoration(
+                  labelText: 'UACE',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty || double.tryParse(value) == null) {
@@ -242,9 +262,13 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 },
                 onChanged: (value) => _calculateAndUpdateTotalPoints(),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _continuingResidentController,
-                decoration: const InputDecoration(labelText: 'Continuing Resident'),
+                decoration: const InputDecoration(
+                  labelText: 'Continuing Resident',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty || int.tryParse(value) == null) {
@@ -254,9 +278,13 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 },
                 onChanged: (value) => _calculateAndUpdateTotalPoints(),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _privateStudentController,
-                decoration: const InputDecoration(labelText: 'Private Student'),
+                decoration: const InputDecoration(
+                  labelText: 'Private Student',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty || int.tryParse(value) == null) {
@@ -266,9 +294,13 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 },
                 onChanged: (value) => _calculateAndUpdateTotalPoints(),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _totalPointsController,
-                decoration: const InputDecoration(labelText: 'Total Points'),
+                decoration: const InputDecoration(
+                  labelText: 'Total Points',
+                  border: OutlineInputBorder(),
+                ),
                 readOnly: true,
               ),
               const SizedBox(height: 20),

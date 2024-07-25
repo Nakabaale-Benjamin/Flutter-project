@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:halls/admin/criteria.dart';
 import 'package:halls/admin/message.dart';
 import 'package:halls/services/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'criteria.dart';
 import 'package:halls/login.dart';
 
 
@@ -40,7 +40,7 @@ class _AdminPanelState extends State<AdminPanel> {
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (BuildContext context) {
-                  return const Criteria();
+                  return const CriteriaScreen();
                 }));
               },
             )

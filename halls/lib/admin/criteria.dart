@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:halls/admin/hall_update.dart';
+import 'package:halls/criteria_update.dart';
 
 class Criteria extends StatefulWidget {
   const Criteria({super.key});
@@ -18,9 +19,16 @@ class _CriteriaState extends State<Criteria> {
         TextButton(onPressed:  () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
+                    return  CriteriaScreen();
+                  }));
+                }, child: const Text("Update hall info")),
+                TextButton(onPressed:  () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (BuildContext context) {
                     return  EditHallScreen();
                   }));
-                }, child: const Text("Update hall info"))
+                }, child: const Text("Manage info"))
+                 
       ],
     ),
     );

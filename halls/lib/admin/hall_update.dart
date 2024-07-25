@@ -18,6 +18,8 @@ class _HallsScreenState extends State<HallsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Hall Details'),
+        backgroundColor: Colors.green,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: ConstrainedBox(

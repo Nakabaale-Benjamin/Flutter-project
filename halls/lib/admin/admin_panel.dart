@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
-import 'hall_update.dart';
-import 'criteria_update.dart';
+import 'package:halls/admin/hall_update.dart';
+import 'package:halls/criteria_update.dart';
+
 
 enum SideBarItem {
   dashboard,

@@ -6,6 +6,8 @@ class TextFieldInput extends StatefulWidget {
   final String hintText;
   final IconData? icon;
   final TextInputType textInputType;
+  final void Function(String)? onChanged;
+  final bool readOnly;
 
   const TextFieldInput({
     Key? key,
@@ -14,6 +16,8 @@ class TextFieldInput extends StatefulWidget {
     required this.hintText,
     this.icon,
     required this.textInputType,
+    this.onChanged,
+    this.readOnly = false,
   }) : super(key: key);
 
   @override
@@ -37,7 +41,7 @@ class _TextFieldInputState extends State<TextFieldInput> {
         style: const TextStyle(fontSize: 20),
         controller: widget.textEditingController,
         decoration: InputDecoration(
-          prefixIcon: Icon(widget.icon, color: Colors.black54),
+          prefixIcon: widget.icon != null ? Icon(widget.icon, color: Colors.black54) : null,
           hintText: widget.hintText,
           hintStyle: const TextStyle(color: Colors.black45, fontSize: 18),
           enabledBorder: OutlineInputBorder(
@@ -71,6 +75,8 @@ class _TextFieldInputState extends State<TextFieldInput> {
         ),
         keyboardType: widget.textInputType,
         obscureText: widget.isPass ? _obscureText : false,
+        onChanged: widget.onChanged,
+        readOnly: widget.readOnly,
       ),
     );
   }

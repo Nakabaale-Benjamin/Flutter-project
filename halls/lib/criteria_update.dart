@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../widget/text_field.dart'; // Import your custom TextFieldInput widget
+import '../widget/button.dart'; // Import your custom Button widget
 
 class Criterias {
   int attachmentToHall;
@@ -63,15 +65,13 @@ class Criterias {
 }
 
 class CriteriaScreen extends StatefulWidget {
-  const CriteriaScreen({Key? key}) : super(key: key);
-
   @override
   _CriteriaScreenState createState() => _CriteriaScreenState();
 }
 
 class _CriteriaScreenState extends State<CriteriaScreen> {
   final _formKey = GlobalKey<FormState>();
-  late Criterias _criteria;
+  Criterias? _criteria;
 
   final TextEditingController _attachmentToHallController = TextEditingController();
   final TextEditingController _governmentStudentController = TextEditingController();
@@ -97,17 +97,16 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
       if (snapshot.exists) {
         setState(() {
           _criteria = Criterias.fromMap(snapshot.data() as Map<String, dynamic>);
-          _attachmentToHallController.text = _criteria.attachmentToHall.toString();
-          _governmentStudentController.text = _criteria.governmentStudent.toString();
-          _disabledController.text = _criteria.disabled.toString();
-          _cgpaController.text = _criteria.cgpa.toString();
-          _uaceController.text = _criteria.uace.toString();
-          _continuingResidentController.text = _criteria.continuingResident.toString();
-          _privateStudentController.text = _criteria.privateStudent.toString();
-          _totalPointsController.text = _criteria.totalPoints.toString();
+          _attachmentToHallController.text = _criteria!.attachmentToHall.toString();
+          _governmentStudentController.text = _criteria!.governmentStudent.toString();
+          _disabledController.text = _criteria!.disabled.toString();
+          _cgpaController.text = _criteria!.cgpa.toString();
+          _uaceController.text = _criteria!.uace.toString();
+          _continuingResidentController.text = _criteria!.continuingResident.toString();
+          _privateStudentController.text = _criteria!.privateStudent.toString();
+          _totalPointsController.text = _criteria!.totalPoints.toString();
         });
       } else {
-        // Initialize with default values if not present
         setState(() {
           _criteria = Criterias(
             attachmentToHall: 0,
@@ -137,8 +136,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
         continuingResident: int.tryParse(_continuingResidentController.text) ?? 0,
         privateStudent: int.tryParse(_privateStudentController.text) ?? 0,
       );
-      _criteria.calculateTotalPoints();
-      _totalPointsController.text = _criteria.totalPoints.toString();
+      _criteria!.calculateTotalPoints();
+      _totalPointsController.text = _criteria!.totalPoints.toString();
     });
   }
 
@@ -147,7 +146,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
       _calculateAndUpdateTotalPoints();
 
       try {
-        await _firestore.collection(_collection).doc('current').set(_criteria.toMap());
+        await _firestore.collection(_collection).doc('current').set(_criteria!.toMap());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Criteria updated successfully')),
         );
@@ -177,147 +176,90 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
         backgroundColor: Colors.green,
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _attachmentToHallController,
-                decoration: const InputDecoration(
-                  labelText: 'Attachment to Hall',
-                  border: OutlineInputBorder(),
+      body: _criteria == null 
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFieldInput(
+                      textEditingController: _attachmentToHallController,
+                      hintText: 'Attachment to Hall',
+                      textInputType: TextInputType.number,
+                      icon: Icons.attach_file,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
+                    SizedBox(height: 16),
+                    TextFieldInput(
+                      textEditingController: _governmentStudentController,
+                      hintText: 'Government Student',
+                      textInputType: TextInputType.number,
+                      icon: Icons.account_balance,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
+                    SizedBox(height: 16),
+                    TextFieldInput(
+                      textEditingController: _disabledController,
+                      hintText: 'Disabled',
+                      textInputType: TextInputType.number,
+                      icon: Icons.accessibility,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
+                    SizedBox(height: 16),
+                    TextFieldInput(
+                      textEditingController: _cgpaController,
+                      hintText: 'CGPA',
+                      textInputType: TextInputType.numberWithOptions(decimal: true),
+                      icon: Icons.grade,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
+                    SizedBox(height: 16),
+                    TextFieldInput(
+                      textEditingController: _uaceController,
+                      hintText: 'UACE',
+                      textInputType: TextInputType.numberWithOptions(decimal: true),
+                      icon: Icons.school,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
+                    SizedBox(height: 16),
+                    TextFieldInput(
+                      textEditingController: _continuingResidentController,
+                      hintText: 'Continuing Student',
+                      textInputType: TextInputType.number,
+                      icon: Icons.home,
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onChanged: (value) => _calculateAndUpdateTotalPoints(),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _governmentStudentController,
-                decoration: const InputDecoration(
-                  labelText: 'Government Student',
-                  border: OutlineInputBorder(),
+                    SizedBox(height: 16),
+                    TextFieldInput(
+                      textEditingController: _privateStudentController,
+                      hintText: 'Private Student',
+                      textInputType: TextInputType.number,
+                      icon: Icons.person,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
+                    SizedBox(height: 16),
+                    TextFieldInput(
+                      textEditingController: _totalPointsController,
+                      hintText: 'Total Points',
+                      textInputType: TextInputType.number,
+                      icon: Icons.star,
+                      readOnly: true,
+                    ),
+                    SizedBox(height: 20),
+                    MyButtons(
+                      onTap: _updateCriteria,
+                      text: "Update Criteria",
+                    ),
+                    SizedBox(height: 20),
+                    MyButtons(
+                      onTap: _deleteCriteria,
+                      text: "Delete Criteria",
+                    ),
+                  ],
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onChanged: (value) => _calculateAndUpdateTotalPoints(),
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _disabledController,
-                decoration: const InputDecoration(
-                  labelText: 'Disabled',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onChanged: (value) => _calculateAndUpdateTotalPoints(),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _cgpaController,
-                decoration: const InputDecoration(
-                  labelText: 'CGPA',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty || double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onChanged: (value) => _calculateAndUpdateTotalPoints(),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _uaceController,
-                decoration: const InputDecoration(
-                  labelText: 'UACE',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty || double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onChanged: (value) => _calculateAndUpdateTotalPoints(),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _continuingResidentController,
-                decoration: const InputDecoration(
-                  labelText: 'Continuing Resident',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onChanged: (value) => _calculateAndUpdateTotalPoints(),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _privateStudentController,
-                decoration: const InputDecoration(
-                  labelText: 'Private Student',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onChanged: (value) => _calculateAndUpdateTotalPoints(),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _totalPointsController,
-                decoration: const InputDecoration(
-                  labelText: 'Total Points',
-                  border: OutlineInputBorder(),
-                ),
-                readOnly: true,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _updateCriteria,
-                child: const Text('Update Criteria'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _deleteCriteria,
-                child: const Text('Delete Criteria'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

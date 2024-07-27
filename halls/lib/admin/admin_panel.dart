@@ -6,6 +6,8 @@ import 'package:halls/admin/hall_update.dart';
 import 'package:halls/criteria_update.dart';
 import "../widget/button.dart";
 import "assignment.dart";
+import "studentlistScreen.dart";
+import "progressScreen.dart";
 
 enum SideBarItem {
   dashboard,
@@ -138,22 +140,98 @@ class CustomSidebar extends StatelessWidget {
   }
 }
 
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: MyButtons(
-            onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (BuildContext context) {
-                return StudentAssignmentScreen();
-              }));
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return AdminStudentListScreen();
+                }),
+              );
             },
-            text: "Assign Students Rooms "));
-  }
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              padding: EdgeInsets.symmetric(horizontal: 135, vertical: 15), // Button padding
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40), // Button border radius
+              ),
+              textStyle: TextStyle(
+                fontSize: 20,// Button text size
+                fontWeight: FontWeight.bold, // Button text weight
+                color: Colors.white // Button text color
+              ),
+            ),
+            child: Text("Student List"),
+          ),
+          SizedBox(height: 20),
+
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return StudentAssignmentScreen();
+                }),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15), // Button padding
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40), // Button border radius
+              ),
+              textStyle: TextStyle(
+                fontSize: 20, // Button text size
+                fontWeight: FontWeight.bold,
+                color: Colors.white // Button text color
+              ),
+            ),
+            child: Text("Assign Students Rooms"),
+          ),
+          SizedBox(height: 20), // Spacing between buttons
+
+        
+
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return StudentProgressScreen(); // Replace with the actual screen you want to navigate to
+                }),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green, // Background color of the third button
+              padding: EdgeInsets.symmetric(horizontal: 105, vertical: 15), // Button padding
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40), // Button border radius
+              ),
+              textStyle: TextStyle(
+                fontSize: 20, // Button text size
+                fontWeight: FontWeight.bold, // Button text weight
+                color: Colors.white 
+                
+                // Button text color
+              ),
+            ),
+            child: Text("Allocation Results"),
+          ),
+          SizedBox(height: 20),
+        ],
+      ),
+    );  }
 }
+
+
 
 class UsersScreen extends StatelessWidget {
   const UsersScreen({super.key});

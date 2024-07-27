@@ -6,7 +6,7 @@ class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final ProgressService _progressService = ProgressService();
 
-   Future<Map<String, dynamic>> fetchStudentDetails(String id) async {
+  Future<Map<String, dynamic>> fetchStudentDetails(String id) async {
     final snapshot = await _db.collection('students').doc(id).get();
     return snapshot.data() as Map<String, dynamic>;
   }
@@ -233,7 +233,7 @@ class FirestoreService {
                 print('Progress saved with no available bedspaces: $progress');
               }
             } else {
-                            final progress = Progress(
+              final progress = Progress(
                 name: studentData['fullName'] as String,
                 registrationNumber: studentData['registrationNumber'] as String,
                 hall: null,
@@ -241,29 +241,21 @@ class FirestoreService {
                 points: points,
               );
               await _progressService.saveProgress(id, progress);
-              print('Progress saved with no hall name: $progress');
+              print('Progress saved with no hall assigned: $progress');
             }
           } else {
-            final progress = Progress(
-              name: studentData['fullName'] as String,
-              registrationNumber: studentData['registrationNumber'] as String,
-              hall: null,
-              bedspace: null,
-              points: points,
-            );
-            await _progressService.saveProgress(id, progress);
-            print('Progress saved with low points: $progress');
+            print('Student $id did not meet the criteria.');
           }
         } catch (e) {
-          print('Error calculating points for student ID: $id. Error: $e');
+          print('Error processing student with uid: $id. Error: $e');
         }
       }
     } catch (e) {
-      print('Error processing all students: $e');
+      print('Error in processAllStudents: $e');
     }
   }
 
-   // Fetch all students from Firestore
+  // Fetch all students from Firestore
   Future<List<Map<String, dynamic>>> fetchAllStudents() async {
     try {
       QuerySnapshot querySnapshot = await _db.collection('students').get();
@@ -308,7 +300,8 @@ class FirestoreService {
   }
 }
 
-  // Helper method to safely extract and convert numerical values
+
+  // Helper method to safely extract numerical values from a map
   num? _getNumFromMap(Map<String, dynamic> map, String key) {
     final value = map[key];
     if (value is num) {
@@ -318,4 +311,3 @@ class FirestoreService {
     }
     return null;
   }
-

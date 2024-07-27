@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:halls/hall.dart';
 import 'package:halls/profile.dart';
-
+import 'admin/progressScreen.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -18,32 +17,17 @@ class _NavBarState extends State<NavBar> {
       child: ListView(
         padding: EdgeInsets.zero, 
         children: [
-          UserAccountsDrawerHeader(
-            accountName: Text('Kasakya Denis Nicholas'), 
-            accountEmail: Text('kdnicholas9@gmail.com'),
-            currentAccountPicture: CircleAvatar(
-              child: ClipOval(
-                child: Image.asset(
-                  "assets/images/studentprofile.png",
-                  width: 90,
-                  height: 90,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              image: DecorationImage(
-                image: AssetImage(
-                 "                     ",
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
+          SizedBox(
+            height: 50,
           ),
         ListTile(
+          
   leading: Icon(Icons.person),
-  title: Text('Profile'),
+  title: Text('Profile',style: TextStyle(
+          fontWeight: FontWeight.bold,
+         fontSize:20.0,
+         color: Colors.blue,
+        )),
               onTap: () {
               Navigator.of(context)
                     .push(MaterialPageRoute(builder: (BuildContext context) {
@@ -54,15 +38,24 @@ class _NavBarState extends State<NavBar> {
 ),
           ListTile(
             leading: Icon(Icons.notifications),
-            title: Text('Notifications'),
-            onTap: () => null,
+            title: Text('Notifications',style: TextStyle(
+          fontWeight: FontWeight.bold,
+         fontSize:20.0,
+         color: Colors.blue,
+        )),
+            onTap: () {
+              Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext context) {
+                  return StudentProgressScreen();
+                }));
+            },
             trailing: Container(
               color: Colors.red,
               width: 20,
               height: 20,
               child: Center(
                 child: Text(
-                  '5',
+                  '1',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -75,7 +68,11 @@ class _NavBarState extends State<NavBar> {
          
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: Text('Exit'),
+            title: Text('Exit', style: TextStyle(
+          fontWeight: FontWeight.bold,
+         fontSize:20.0,
+         color: Colors.blue,
+        )),
             onTap: () {
               Navigator.of(context)
                     .push(MaterialPageRoute(builder: (BuildContext context) {

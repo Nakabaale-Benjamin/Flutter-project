@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'delete_progress.dart';
+import "delete_students.dart";
 
-class Message extends StatefulWidget {
-  const Message({super.key});
+class Messa extends StatefulWidget {
+  const Messa({super.key});
 
   @override
-  State<Message> createState() => _MessageState();
+  State<Messa> createState() => _MessaState();
 }
 
-class _MessageState extends State<Message> {
+class _MessaState extends State<Messa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold();

@@ -35,8 +35,8 @@ class _StudentAssignmentScreenState extends State<StudentAssignmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: const Text('Student Assignment To Rooms',style: TextStyle(
+        backgroundColor: Colors.blue,
+        title: const Text('Assign Rooms',style: TextStyle(
                     fontSize: 25
                     ,
                     fontWeight: FontWeight.bold,

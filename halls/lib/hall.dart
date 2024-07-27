@@ -135,7 +135,7 @@ class _HallState extends State<Hall> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -162,7 +162,7 @@ class _HallState extends State<Hall> {
                     fontSize: 25
                     ,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -189,7 +189,7 @@ class _HallState extends State<Hall> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -216,7 +216,7 @@ class _HallState extends State<Hall> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -243,7 +243,7 @@ class _HallState extends State<Hall> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -270,7 +270,7 @@ class _HallState extends State<Hall> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -297,7 +297,7 @@ class _HallState extends State<Hall> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -324,7 +324,7 @@ class _HallState extends State<Hall> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -351,7 +351,7 @@ class _HallState extends State<Hall> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.blue,
                   ),
                 ),
               ),

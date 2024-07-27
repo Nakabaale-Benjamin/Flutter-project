@@ -17,7 +17,6 @@ class FirestoreService {
       DocumentSnapshot snapshot =
           await _db.collection('criteria').doc('current').get();
       final data = snapshot.data() as Map<String, dynamic>?; // Fetch and cast data
-      print('Criteria data: $data'); // Log criteria data
       return data ?? {}; // Return an empty map if data is null
     } catch (e) {
       print('Error fetching criteria: $e');
@@ -30,7 +29,6 @@ class FirestoreService {
     try {
       QuerySnapshot querySnapshot = await _db.collection('students').get();
       List<String> ids = querySnapshot.docs.map((doc) => doc.id).toList();
-      print('Fetched student IDs: $ids');
       return ids;
     } catch (e) {
       print('Error fetching student IDs: $e');
@@ -47,10 +45,8 @@ class FirestoreService {
         DocumentSnapshot snapshot =
             await _db.collection('students').doc(id).get();
         if (!snapshot.exists) {
-          print('No student document found with ID: $id');
           studentDataList.add(null);
         } else {
-          print('Fetched student document: ${snapshot.data()}');
           studentDataList.add(snapshot.data() as Map<String, dynamic>?);
         }
       } catch (e) {
@@ -69,7 +65,6 @@ class FirestoreService {
       List<Map<String, dynamic>?> hallDataList = querySnapshot.docs.map((doc) {
         return doc.data() as Map<String, dynamic>?;
       }).toList();
-      print('Fetched all hall data: $hallDataList');
       return hallDataList;
     } catch (e) {
       print('Error fetching halls data: $e');
@@ -79,31 +74,26 @@ class FirestoreService {
 
   // Get available bedspace from hall document by hall ID
   Future<int?> _getAvailableBedspace(String hallId) async {
-    print('Searching for hall ID: $hallId'); // Debug print at the start
 
     try {
       DocumentSnapshot hallDoc = await _db.collection('halls').doc(hallId).get();
 
       if (!hallDoc.exists) {
-        print('Hall data not found for ID: $hallId');
         return null;
       }
 
       final hallData = hallDoc.data() as Map<String, dynamic>?;
 
       if (hallData == null) {
-        print('No data found for hall ID: $hallId');
+
         return null;
       }
-
-      print('Hall data found: $hallData'); // Debug print for found data
 
       final int rooms = hallData['rooms'] as int? ?? 0;
       final int bedspacesPerRoom = hallData['bedspace'] as int? ?? 0;
 
       final int totalBedspaces = rooms * bedspacesPerRoom;
 
-      print('Fetched total bedspaces: $totalBedspaces for hall ID: $hallId');
       return totalBedspaces;
 
     } catch (e) {
@@ -128,12 +118,8 @@ class FirestoreService {
         final studentData = studentDataList[i];
 
         if (studentData == null) {
-          print('Student data not found for uid: $id');
           continue;
         }
-
-        print('Student data: $studentData');
-
         int points = 0;
 
         try {
@@ -183,12 +169,12 @@ class FirestoreService {
             points += criteriaPrivateStudent?.toInt() ?? 0;
           }
 
-          if (uace != null && uace >= 10) {
+          if (uace != null && uace >= 13) {
             points += criteriaUace?.toInt() ?? 0;
           }
 
           // Check if the points exceed the threshold
-          if (points > 50) {
+          if (points > 60) {
             final hallName = studentData['hallOfAttachment'] as String?;
             if (hallName != null) {
               // Get available bedspace
@@ -218,7 +204,6 @@ class FirestoreService {
                     points: points,
                   );
                   await _progressService.saveProgress(id, progress);
-                  print('Progress saved with no available bedspace: $progress');
                 }
               } else {
                 // Error in fetching bedspaces
@@ -230,7 +215,6 @@ class FirestoreService {
                   points: points,
                 );
                 await _progressService.saveProgress(id, progress);
-                print('Progress saved with no available bedspaces: $progress');
               }
             } else {
                             final progress = Progress(
@@ -241,7 +225,6 @@ class FirestoreService {
                 points: points,
               );
               await _progressService.saveProgress(id, progress);
-              print('Progress saved with no hall name: $progress');
             }
           } else {
             final progress = Progress(
@@ -252,7 +235,6 @@ class FirestoreService {
               points: points,
             );
             await _progressService.saveProgress(id, progress);
-            print('Progress saved with low points: $progress');
           }
         } catch (e) {
           print('Error calculating points for student ID: $id. Error: $e');

@@ -8,6 +8,7 @@ import "../widget/button.dart";
 import "assignment.dart";
 import "studentlistScreen.dart";
 import "progressScreen.dart";
+import "delete_students.dart";
 
 enum SideBarItem {
   dashboard,
@@ -87,7 +88,14 @@ class AdminPanel extends ConsumerWidget {
     final currentPage = ref.watch(sideBarItemProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Panel')),
+      appBar: AppBar(
+          backgroundColor: Colors.blue, title: const Text('Admin Panel',
+           style: TextStyle(
+                    fontSize: 25
+                    ,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),)),
       drawer: Drawer(
         child: CustomSidebar(
           currentPage: currentPage,
@@ -124,15 +132,20 @@ class CustomSidebar extends StatelessWidget {
       children: SideBarItem.values.map((item) {
         final isSelected = currentPage == item;
         return ListTile(
-          leading: Icon(item.iconData, color: isSelected ? Colors.green : Colors.black),
+          leading: Icon(item.iconData,
+              color: isSelected ? Colors.green : Colors.black),
           title: Text(
             item.value,
             style: TextStyle(
               fontSize: 18, // Change this to your desired font size
-              color: isSelected ? Colors.green : Colors.black, // Change this to your desired font color
+              color: isSelected
+                  ? Colors.green
+                  : Colors.black, // Change this to your desired font color
             ),
           ),
-          tileColor: isSelected ? Color.fromARGB(255, 199, 243, 203) : Colors.transparent,
+          tileColor: isSelected
+              ? Color.fromARGB(255, 199, 243, 203)
+              : Colors.transparent,
           onTap: () => onItemSelected(item),
         );
       }).toList(),
@@ -140,98 +153,63 @@ class CustomSidebar extends StatelessWidget {
   }
 }
 
-
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return  ListView(
+        scrollDirection: Axis.vertical,
         children: [
-          
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (BuildContext context) {
-                  return AdminStudentListScreen();
-                }),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              padding: EdgeInsets.symmetric(horizontal: 135, vertical: 15), // Button padding
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40), // Button border radius
-              ),
-              textStyle: TextStyle(
-                fontSize: 20,// Button text size
-                fontWeight: FontWeight.bold, // Button text weight
-                color: Colors.white // Button text color
-              ),
-            ),
-            child: Text("Student List"),
-          ),
+          MyButtons(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return AdminStudentListScreen();
+                  }),
+                );
+              },
+              text: "Student list"),
+
           SizedBox(height: 20),
 
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (BuildContext context) {
-                  return StudentAssignmentScreen();
-                }),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15), // Button padding
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40), // Button border radius
-              ),
-              textStyle: TextStyle(
-                fontSize: 20, // Button text size
-                fontWeight: FontWeight.bold,
-                color: Colors.white // Button text color
-              ),
-            ),
-            child: Text("Assign Students Rooms"),
-          ),
+          MyButtons(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return StudentAssignmentScreen();
+                  }),
+                );
+              },
+              text: "Assign Students Rooms"),
           SizedBox(height: 20), // Spacing between buttons
 
-        
+          MyButtons(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return StudentProgressScreen(); // Replace with the actual screen you want to navigate to
+                  }),
+                );
+              },
+              text: "Allocation Results"),
 
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (BuildContext context) {
-                  return StudentProgressScreen(); // Replace with the actual screen you want to navigate to
-                }),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green, // Background color of the third button
-              padding: EdgeInsets.symmetric(horizontal: 105, vertical: 15), // Button padding
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40), // Button border radius
-              ),
-              textStyle: TextStyle(
-                fontSize: 20, // Button text size
-                fontWeight: FontWeight.bold, // Button text weight
-                color: Colors.white 
-                
-                // Button text color
-              ),
-            ),
-            child: Text("Allocation Results"),
-          ),
-          SizedBox(height: 20),
+           SizedBox(height: 20),
+
+          MyButtons(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return DeleteAllStudentsButton(); // Replace with the actual screen you want to navigate to
+                  }),
+                );
+              },
+              text: "Delete Information"),
         ],
-      ),
-    );  }
+      
+    );
+  }
 }
-
-
 
 class UsersScreen extends StatelessWidget {
   const UsersScreen({super.key});
@@ -241,7 +219,8 @@ class UsersScreen extends StatelessWidget {
     return Center(
       child: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("users").snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
@@ -280,14 +259,14 @@ class LogoutScreen extends StatelessWidget {
       } catch (e) {
         print('Error during logout: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to logout')),
+          const SnackBar(content: Text('Failed to logout')),
         );
       }
     }
 
     _logout();
 
-    return Scaffold(
+    return const Scaffold(
       body: Center(child: CircularProgressIndicator()),
     );
   }

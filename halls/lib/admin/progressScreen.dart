@@ -29,7 +29,15 @@ class _StudentProgressScreenState extends State<StudentProgressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Student Progress'),
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Student Progress',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30.0,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: ListView.builder(
         itemCount: _progressList.length,

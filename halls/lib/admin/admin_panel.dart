@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -160,7 +161,33 @@ class UsersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Users screen', style: TextStyle(fontSize: 24)),
+      child: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("users").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, i) {
+                var user = snapshot.data!.docs[i];
+                return Container(
+                  width: 200,
+                  height: 100,
+                  color: Colors.green,
+                  child: Column(
+                    children: [
+                      Text("Name: " + user['name']),
+                      SizedBox(height: 10),
+                      Text("Email: " + user['email']),
+                    ],
+                  ),
+                );
+              },
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      ),
     );
   }
 }

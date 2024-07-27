@@ -125,7 +125,7 @@ class DashboardScreen extends StatelessWidget {
                 return StudentAssignmentScreen();
               }));
             },
-            text: "Manage Criteria "));
+            text: "Assign Students Rooms "));
   }
 }
 

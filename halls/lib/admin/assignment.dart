@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'firestore_service.dart'; // Import the FirestoreService
+import "../widget/button.dart";
 
 class StudentAssignmentScreen extends StatefulWidget {
   const StudentAssignmentScreen({super.key});
 
   @override
-  _StudentAssignmentScreenState createState() => _StudentAssignmentScreenState();
+  _StudentAssignmentScreenState createState() =>
+      _StudentAssignmentScreenState();
 }
 
 class _StudentAssignmentScreenState extends State<StudentAssignmentScreen> {
@@ -33,19 +35,24 @@ class _StudentAssignmentScreenState extends State<StudentAssignmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Student Assignment'),
+        backgroundColor: Colors.green,
+        title: const Text('Student Assignment To Rooms',style: TextStyle(
+                    fontSize: 25
+                    ,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
+            MyButtons(
+              onTap: () {
                 // Replace with the UID of the student you want to assign
                 _assignStudent('student_uid_here');
               },
-              child: const Text('Assign Student'),
-            ),
+              text: 'Assign Students'),
             const SizedBox(height: 20),
             Text(
               _statusMessage,

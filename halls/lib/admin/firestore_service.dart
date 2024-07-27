@@ -11,8 +11,7 @@ class FirestoreService {
     try {
       DocumentSnapshot snapshot =
           await _db.collection('criteria').doc('current').get();
-      final data =
-          snapshot.data() as Map<String, dynamic>?; // Fetch and cast data
+      final data = snapshot.data() as Map<String, dynamic>?; // Fetch and cast data
       print('Criteria data: $data'); // Log criteria data
       return data ?? {}; // Return an empty map if data is null
     } catch (e) {
@@ -58,49 +57,54 @@ class FirestoreService {
     return studentDataList;
   }
 
-  // Fetch data for given halls
-  Future<List<Map<String, dynamic>?>> fetchHalls(List<String> hallNames) async {
-    List<Map<String, dynamic>?> hallDataList = [];
-
-    for (String hallName in hallNames) {
-      try {
-        DocumentSnapshot snapshot =
-            await _db.collection('halls').doc(hallName).get();
-        if (!snapshot.exists) {
-          print('No hall document found with name: $hallName');
-          hallDataList.add(null);
-        } else {
-          print(
-              'Fetched hall document: ${snapshot.data()}'); // Log hall document data
-          hallDataList.add(snapshot.data() as Map<String, dynamic>?);
-        }
-      } catch (e) {
-        print('Error fetching hall document with name: $hallName. Error: $e');
-        hallDataList.add(null);
-      }
+  // Fetch all halls data
+  Future<List<Map<String, dynamic>?>> fetchAllHalls() async {
+    try {
+      QuerySnapshot querySnapshot = await _db.collection('halls').get();
+      List<Map<String, dynamic>?> hallDataList = querySnapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>?;
+      }).toList();
+      print('Fetched all hall data: $hallDataList');
+      return hallDataList;
+    } catch (e) {
+      print('Error fetching halls data: $e');
+      return []; // Return an empty list in case of an error
     }
-
-    return hallDataList;
   }
 
-  // Get available bedspace from hall data
-  Future<int?> _getAvailableBedspace(String hallName) async {
-    final hallData = (await fetchHalls([hallName])).firstWhere(
-      (data) => data != null && data['name'] == hallName,
-      orElse: () => null,
-    );
+  // Get available bedspace from hall document by hall ID
+  Future<int?> _getAvailableBedspace(String hallId) async {
+    print('Searching for hall ID: $hallId'); // Debug print at the start
 
-    if (hallData == null) {
-      print('Hall data not found for hall: $hallName');
+    try {
+      DocumentSnapshot hallDoc = await _db.collection('halls').doc(hallId).get();
+
+      if (!hallDoc.exists) {
+        print('Hall data not found for ID: $hallId');
+        return null;
+      }
+
+      final hallData = hallDoc.data() as Map<String, dynamic>?;
+
+      if (hallData == null) {
+        print('No data found for hall ID: $hallId');
+        return null;
+      }
+
+      print('Hall data found: $hallData'); // Debug print for found data
+
+      final int rooms = hallData['rooms'] as int? ?? 0;
+      final int bedspacesPerRoom = hallData['bedspace'] as int? ?? 0;
+
+      final int totalBedspaces = rooms * bedspacesPerRoom;
+
+      print('Fetched total bedspaces: $totalBedspaces for hall ID: $hallId');
+      return totalBedspaces;
+
+    } catch (e) {
+      print('Error fetching hall data for ID: $hallId. Error: $e');
       return null;
     }
-
-    final int bedspacesPerRoom = hallData['rooms'] as int? ?? 0;
-    final int bedspace = hallData['bedspace'] as int? ?? 0;
-    if (bedspace > 0) {
-      return bedspace;
-    }
-    return null;
   }
 
   // Process all students and save their progress
@@ -109,20 +113,10 @@ class FirestoreService {
       final criteria = await fetchCriteria();
       final studentIds = await fetchStudentIds();
       final studentDataList = await fetchStudents(studentIds);
+      final hallsData = await fetchAllHalls(); // Fetch all halls data
 
-      // List of hall names to fetch
-      final hallNames = [
-        'Africa',
-        'Complex',
-        'Livingstone',
-        'Lumumba',
-        'Mary Stuart',
-        'Mitchell',
-        'Nkrumah',
-        'Nsibeirwa',
-        'University Hall'
-      ];
-      final hallsData = await fetchHalls(hallNames);
+      // Track assigned bedspaces
+      final Map<String, int> hallBedspaceAssignments = {};
 
       for (int i = 0; i < studentIds.length; i++) {
         final id = studentIds[i];
@@ -192,37 +186,49 @@ class FirestoreService {
           if (points > 50) {
             final hallName = studentData['hallOfAttachment'] as String?;
             if (hallName != null) {
-              final hallData = hallsData.firstWhere(
-                (data) => data != null && data['name'] == hallName,
-                orElse: () => null,
-              );
+              // Get available bedspace
+              int? totalBedspaces = await _getAvailableBedspace(hallName);
+              if (totalBedspaces != null) {
+                // Assign bedspace
+                int assignedBedspace = (hallBedspaceAssignments[hallName] ?? 0) + 1;
+                if (assignedBedspace <= totalBedspaces) {
+                  hallBedspaceAssignments[hallName] = assignedBedspace;
 
-              if (hallData != null) {
-                int? bedspace = await _getAvailableBedspace(hallName);
-                final progress = Progress(
-                  name: studentData['fullName'] as String,
-                  registrationNumber:
-                      studentData['registrationNumber'] as String,
-                  hall: hallName,
-                  bedspace: bedspace,
-                  points: points,
-                );
-                await _progressService.saveProgress(id, progress);
-                print('Progress saved: $progress');
+                  final progress = Progress(
+                    name: studentData['fullName'] as String,
+                    registrationNumber: studentData['registrationNumber'] as String,
+                    hall: hallName,
+                    bedspace: assignedBedspace,
+                    points: points,
+                  );
+                  await _progressService.saveProgress(id, progress);
+                  print('Progress saved: $progress');
+                } else {
+                  // No available bedspaces
+                  final progress = Progress(
+                    name: studentData['fullName'] as String,
+                    registrationNumber: studentData['registrationNumber'] as String,
+                    hall: hallName,
+                    bedspace: null,
+                    points: points,
+                  );
+                  await _progressService.saveProgress(id, progress);
+                  print('Progress saved with no available bedspace: $progress');
+                }
               } else {
+                // Error in fetching bedspaces
                 final progress = Progress(
                   name: studentData['fullName'] as String,
-                  registrationNumber:
-                      studentData['registrationNumber'] as String,
-                  hall: null,
+                  registrationNumber: studentData['registrationNumber'] as String,
+                  hall: hallName,
                   bedspace: null,
                   points: points,
                 );
                 await _progressService.saveProgress(id, progress);
-                print('Progress saved without hall data: $progress');
+                print('Progress saved with no available bedspaces: $progress');
               }
             } else {
-              final progress = Progress(
+                            final progress = Progress(
                 name: studentData['fullName'] as String,
                 registrationNumber: studentData['registrationNumber'] as String,
                 hall: null,
@@ -252,7 +258,7 @@ class FirestoreService {
     }
   }
 
-// Helper method to safely extract and convert numerical values
+  // Helper method to safely extract and convert numerical values
   num? _getNumFromMap(Map<String, dynamic> map, String key) {
     final value = map[key];
     if (value is num) {

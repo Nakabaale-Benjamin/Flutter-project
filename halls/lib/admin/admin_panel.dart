@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:halls/admin/hall_update.dart';
 import 'package:halls/criteria_update.dart';
 import "../widget/button.dart";
@@ -84,30 +83,56 @@ class AdminPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPage = ref.watch(sideBarItemProvider);
 
-    return AdminScaffold(
+    return Scaffold(
       appBar: AppBar(title: const Text('Admin Panel')),
-      sideBar: SideBar(
-        activeBackgroundColor: Color.fromARGB(255, 95, 173, 101),
-        onSelected: (item) {
-          if (item.route == SideBarItem.logout.name) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LogoutScreen()),
-            );
-          } else {
-            ref.read(sideBarItemProvider.notifier).selectPage(
-                SideBarItem.values.firstWhere((e) => e.name == item.route));
-          }
-        },
-        items: SideBarItem.values
-            .map((e) => AdminMenuItem(
-                  title: e.value,
-                  icon: e.iconData,
-                  route: e.name,
-                ))
-            .toList(),
-        selectedRoute: currentPage.name,
+      drawer: Drawer(
+        child: CustomSidebar(
+          currentPage: currentPage,
+          onItemSelected: (item) {
+            if (item == SideBarItem.logout) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => LogoutScreen()),
+              );
+            } else {
+              ref.read(sideBarItemProvider.notifier).selectPage(item);
+              Navigator.of(context).pop(); // Close the drawer
+            }
+          },
+        ),
       ),
       body: currentPage.body,
+    );
+  }
+}
+
+class CustomSidebar extends StatelessWidget {
+  final SideBarItem currentPage;
+  final void Function(SideBarItem) onItemSelected;
+
+  const CustomSidebar({
+    Key? key,
+    required this.currentPage,
+    required this.onItemSelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: SideBarItem.values.map((item) {
+        final isSelected = currentPage == item;
+        return ListTile(
+          leading: Icon(item.iconData, color: isSelected ? Colors.green : Colors.black),
+          title: Text(
+            item.value,
+            style: TextStyle(
+              fontSize: 18, // Change this to your desired font size
+              color: isSelected ? Colors.green : Colors.black, // Change this to your desired font color
+            ),
+          ),
+          tileColor: isSelected ? Color.fromARGB(255, 199, 243, 203) : Colors.transparent,
+          onTap: () => onItemSelected(item),
+        );
+      }).toList(),
     );
   }
 }

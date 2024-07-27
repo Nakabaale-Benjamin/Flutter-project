@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:halls/admin/hall_update.dart';
 import 'package:halls/criteria_update.dart';
-
+import "../widget/button.dart";
+import "assignment.dart";
 
 enum SideBarItem {
   dashboard,
@@ -71,7 +72,8 @@ class SideBarNotifier extends StateNotifier<SideBarItem> {
   }
 }
 
-final sideBarItemProvider = StateNotifierProvider<SideBarNotifier, SideBarItem>((ref) {
+final sideBarItemProvider =
+    StateNotifierProvider<SideBarNotifier, SideBarItem>((ref) {
   return SideBarNotifier();
 });
 
@@ -92,7 +94,8 @@ class AdminPanel extends ConsumerWidget {
               MaterialPageRoute(builder: (context) => LogoutScreen()),
             );
           } else {
-            ref.read(sideBarItemProvider.notifier).selectPage(SideBarItem.values.firstWhere((e) => e.name == item.route));
+            ref.read(sideBarItemProvider.notifier).selectPage(
+                SideBarItem.values.firstWhere((e) => e.name == item.route));
           }
         },
         items: SideBarItem.values
@@ -115,8 +118,14 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Dashboard screen', style: TextStyle(fontSize: 24)),
-    );
+        child: MyButtons(
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return StudentAssignmentScreen();
+              }));
+            },
+            text: "Manage Criteria "));
   }
 }
 

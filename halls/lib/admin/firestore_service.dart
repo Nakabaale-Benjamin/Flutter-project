@@ -145,7 +145,7 @@ class FirestoreService {
           final criteriaUace = _getNumFromMap(criteria, 'uace');
 
           // Calculate points based on criteria
-          if (cgpa != null && criteriaCgpa != null && cgpa >= criteriaCgpa) {
+          if (cgpa != null && criteriaCgpa != null && cgpa >= 3) {
             weight += criteriaCgpa.toInt();
           }
 

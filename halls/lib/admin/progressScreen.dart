@@ -49,7 +49,7 @@ class _StudentProgressScreenState extends State<StudentProgressScreen> {
               'Registration Number: ${progress['registrationNumber']}\n'
               'Hall: ${progress['hall']}\n'
               'Bedspace: ${progress['bedspace']}\n'
-              'Points: ${progress['points']}',
+              'Weights: ${progress['weight']}',
             ),
             onTap: () {
               // You can choose to handle tap events here if needed

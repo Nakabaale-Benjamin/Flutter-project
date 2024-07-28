@@ -34,8 +34,7 @@ class SubmissionSuccessScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 'Thank you, $studentName!',
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
@@ -97,35 +96,15 @@ class _StudentState extends State<Student> {
   final TextEditingController _registrationController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _collegeController = TextEditingController();
-  final TextEditingController _hallOfAttachmentController =
-      TextEditingController();
-  final TextEditingController _pointsController = TextEditingController();
-  final TextEditingController _cgpaController = TextEditingController();
-
-  String? _studentType = 'Fresher'; // Default value
-  String? _points;
-  String? _cgpa;
+  final TextEditingController _hallOfAttachmentController = TextEditingController();
   String? _selectedYearOfStudy;
   String? _selectedCollege;
-  String? _governmentOrPrivateStudent; // New variable for government/private student
   bool _hasDisability = false;
   bool _isContinuingResident = false;
-
-  bool get _showPointsField => _studentType == 'Fresher';
-  bool get _showCgpaField => _studentType == 'Continuing Student';
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      if (_studentType == 'Fresher') {
-        _points = _pointsController.text;
-      } else if (_studentType == 'Continuing Student') {
-        _cgpa = _cgpaController.text;
-      }
-
-      // Print points and cgpa for debugging
-      print('_points: $_points');
-      print('_cgpa: _cgpa');
 
       try {
         await FirebaseFirestore.instance.collection('students').add({
@@ -138,10 +117,6 @@ class _StudentState extends State<Student> {
           'hallOfAttachment': _hallOfAttachmentController.text,
           'hasDisability': _hasDisability,
           'isContinuingResident': _isContinuingResident,
-          'studentType': _studentType,
-          'governmentOrPrivateStudent': _governmentOrPrivateStudent, // Add to Firestore
-          'points': _points,
-          'cgpa': _cgpa,
           'timestamp': FieldValue.serverTimestamp(),
         });
 
@@ -199,9 +174,7 @@ class _StudentState extends State<Student> {
                 ),
                 const SizedBox(height: 16),
                 CustomDropdown(
-                  value: _sexController.text.isNotEmpty
-                      ? _sexController.text
-                      : null,
+                  value: _sexController.text.isNotEmpty ? _sexController.text : null,
                   label: 'Sex',
                   hint: 'Your sex',
                   items: ['Female', 'Male'],
@@ -268,18 +241,7 @@ class _StudentState extends State<Student> {
                   value: _selectedCollege,
                   label: 'College',
                   hint: 'Select your college',
-                  items: [
-                    'CAES',
-                    'CoCIS',
-                    'CHUSS',
-                    'CEES',
-                    'CEDAT',
-                    'COBAMS',
-                    'CoVAB',
-                    'CHS',
-                    'CoLAS',
-                    'SCHOOL OF LAW'
-                  ],
+                  items: ['CAES', 'CoCIS', 'CHUSS', 'CEES', 'CEDAT', 'COBAMS', 'CoVAB', 'CHS','CoLAS', 'SCHOOL OF LAW'],
                   onChanged: (newValue) {
                     setState(() {
                       _selectedCollege = newValue;
@@ -294,22 +256,10 @@ class _StudentState extends State<Student> {
                 ),
                 const SizedBox(height: 16),
                 CustomDropdown(
-                  value: _hallOfAttachmentController.text.isNotEmpty
-                      ? _hallOfAttachmentController.text
-                      : null,
+                  value: _hallOfAttachmentController.text.isNotEmpty ? _hallOfAttachmentController.text : null,
                   label: 'Hall Of Attachment',
                   hint: 'Select the hall you are attached to',
-                  items: [
-                    'Africa',
-                    'Mary Stuart',
-                    'Complex',
-                    'Nkrumah',
-                    'Lumumba',
-                    "Nsibirwa",
-                    "Livingstone",
-                    "University Hall",
-                    "Mitchell"
-                  ], // Example halls
+                  items: ['Africa', 'Mary Stuart', 'Complex', 'Nkrumah', 'Lumumba',"Nsibirwa","Livingstone","University Hall","Mitchell"], // Example halls
                   onChanged: (newValue) {
                     setState(() {
                       _hallOfAttachmentController.text = newValue ?? '';
@@ -323,60 +273,7 @@ class _StudentState extends State<Student> {
                   },
                 ),
                 const SizedBox(height: 16),
-                CustomDropdown(
-                  value: _studentType,
-                  label: 'Fresher or Continuing student',
-                  hint: 'Select student type',
-                  items: ['Fresher', 'Continuing Student'],
-                  onChanged: (newValue) {
-                    setState(() {
-                      _studentType = newValue ?? 'Fresher';
-                    });
-                  },
-                ),
-          
-                const SizedBox(height: 16),
-                if (_showPointsField)
-                  CustomTextField(
-                    controller: _pointsController,
-                    label: 'Points',
-                    hint: 'Enter your points',
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (_studentType == 'Fresher' &&
-                          (value == null || value.isEmpty)) {
-                        return 'Please enter your points';
-                      }
-                      return null;
-                    },
-                  ),
-                if (_showCgpaField)
-                  CustomTextField(
-                    controller: _cgpaController,
-                    label: 'CGPA',
-                    hint: 'Enter your CGPA',
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (_studentType == 'Continuing Student' &&
-                          (value == null || value.isEmpty)) {
-                        return 'Please enter your CGPA';
-                      }
-                      return null;
-                    },
-                  ),
-                const SizedBox(height: 16),
-                CustomDropdown(
-                  value: _governmentOrPrivateStudent,
-                  label: 'Student Type',
-                  hint: 'Select student type',
-                  items: ['Private Student', 'Government Student'],
-                  onChanged: (newValue) {
-                    setState(() {
-                      _governmentOrPrivateStudent = newValue ?? 'Private Student';
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
+                
                 CustomCheckboxFormField(
                   label: 'Do you have a disability?',
                   hint: 'Check if you have a disability',
@@ -388,7 +285,7 @@ class _StudentState extends State<Student> {
                   },
                 ),
                 const SizedBox(height: 16),
-                CustomCheckboxFormField(
+                 CustomCheckboxFormField(
                   label: 'Are you a continuing resident?',
                   hint: 'Check if you are a continuing resident',
                   initialValue: _isContinuingResident,

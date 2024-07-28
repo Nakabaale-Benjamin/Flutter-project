@@ -3,14 +3,14 @@ class Progress {
   final String registrationNumber;
   final String? hall;
   final int? bedspace;
-  final int points;
+  final int weight;
 
   Progress({
     required this.name,
     required this.registrationNumber,
     this.hall,
     this.bedspace,
-    required this.points,
+    required this.weight,
   });
 
   // Convert a Progress object into a Map for Firestore
@@ -20,7 +20,7 @@ class Progress {
       'registrationNumber': registrationNumber,
       'hall': hall,
       'bedspace': bedspace,
-      'points': points,
+      'weight': weight,
     };
   }
 
@@ -31,7 +31,7 @@ class Progress {
       registrationNumber: map['registrationNumber'],
       hall: map['hall'],
       bedspace: map['bedspace'],
-      points: map['points'],
+      weight: map['weight'],
     );
   }
 }

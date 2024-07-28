@@ -120,17 +120,17 @@ class FirestoreService {
         if (studentData == null) {
           continue;
         }
-        int points = 0;
+        int weight = 0;
 
         try {
           // Safely cast and validate data
           final cgpa = _getNumFromMap(studentData, 'cgpa');
-          final studentType = studentData['studentType'] as String?;
+          final governmentOrPrivateStudent = studentData['governmentOrPrivateStudent'] as String?;
           final hallOfAttachment = studentData['hallOfAttachment'] as String?;
           final hasDisability = studentData['hasDisability'] as bool?;
           final isContinuingResident =
               studentData['isContinuingResident'] as bool?;
-          final uace = _getNumFromMap(studentData, 'uace');
+          final points = _getNumFromMap(studentData, 'points');
 
           final criteriaCgpa = _getNumFromMap(criteria, 'cgpa');
           final criteriaGovernmentStudent =
@@ -146,35 +146,35 @@ class FirestoreService {
 
           // Calculate points based on criteria
           if (cgpa != null && criteriaCgpa != null && cgpa >= criteriaCgpa) {
-            points += criteriaCgpa.toInt();
+            weight += criteriaCgpa.toInt();
           }
 
-          if (studentType == 'Government') {
-            points += criteriaGovernmentStudent?.toInt() ?? 0;
+          if (governmentOrPrivateStudent == 'Government Student') {
+            weight += criteriaGovernmentStudent?.toInt() ?? 0;
           }
 
           if (hallOfAttachment == studentData['hallOfAttachment']) {
-            points += criteriaAttachmentToHall?.toInt() ?? 0;
+             weight += criteriaAttachmentToHall?.toInt() ?? 0;
           }
 
           if (hasDisability == true) {
-            points += criteriaDisabled?.toInt() ?? 0;
+            weight += criteriaDisabled?.toInt() ?? 0;
           }
 
           if (isContinuingResident == true) {
-            points += criteriaContinuingResident?.toInt() ?? 0;
+             weight += criteriaContinuingResident?.toInt() ?? 0;
           }
 
-          if (studentType == 'Private') {
-            points += criteriaPrivateStudent?.toInt() ?? 0;
+          if (governmentOrPrivateStudent == 'Private Student') {
+            weight += criteriaPrivateStudent?.toInt() ?? 0;
           }
 
-          if (uace != null && uace >= 13) {
-            points += criteriaUace?.toInt() ?? 0;
+          if (points != null && points >= 15) {
+             weight += criteriaUace?.toInt() ?? 0;
           }
 
           // Check if the points exceed the threshold
-          if (points > 60) {
+          if (weight >= 60) {
             final hallName = studentData['hallOfAttachment'] as String?;
             if (hallName != null) {
               // Get available bedspace
@@ -190,7 +190,7 @@ class FirestoreService {
                     registrationNumber: studentData['registrationNumber'] as String,
                     hall: hallName,
                     bedspace: assignedBedspace,
-                    points: points,
+                    weight:  weight,
                   );
                   await _progressService.saveProgress(id, progress);
                   print('Progress saved: $progress');
@@ -201,7 +201,7 @@ class FirestoreService {
                     registrationNumber: studentData['registrationNumber'] as String,
                     hall: hallName,
                     bedspace: null,
-                    points: points,
+                    weight:  weight,
                   );
                   await _progressService.saveProgress(id, progress);
                 }
@@ -212,7 +212,7 @@ class FirestoreService {
                   registrationNumber: studentData['registrationNumber'] as String,
                   hall: hallName,
                   bedspace: null,
-                  points: points,
+                  weight:  weight,
                 );
                 await _progressService.saveProgress(id, progress);
               }
@@ -222,7 +222,7 @@ class FirestoreService {
                 registrationNumber: studentData['registrationNumber'] as String,
                 hall: null,
                 bedspace: null,
-                points: points,
+                weight:  weight,
               );
               await _progressService.saveProgress(id, progress);
             }
@@ -232,7 +232,7 @@ class FirestoreService {
               registrationNumber: studentData['registrationNumber'] as String,
               hall: null,
               bedspace: null,
-              points: points,
+              weight:  weight,
             );
             await _progressService.saveProgress(id, progress);
           }
@@ -277,7 +277,7 @@ class FirestoreService {
           'registrationNumber': data['registrationNumber'] ?? 'Not Allocated',
           'hall': data['hall'] ?? 'N/A',
           'bedspace': data['bedspace'] ?? 'Not Allocated',
-          'points': data['points'] ?? 0, // Default to 0 if 'points' is not present
+          'weight': data['weight'] ?? 0, // Default to 0 if 'points' is not present
         };
       }).toList();
     } catch (e) {

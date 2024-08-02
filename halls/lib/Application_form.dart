@@ -97,7 +97,7 @@ class _StudentState extends State<Student> {
   final TextEditingController _registrationController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _collegeController = TextEditingController();
-  final TextEditingController _hallOfAttachmentController =
+  final TextEditingController _hallOfAttachmentController = 
       TextEditingController();
   final TextEditingController _pointsController = TextEditingController();
   final TextEditingController _cgpaController = TextEditingController();
@@ -384,7 +384,7 @@ class _StudentState extends State<Student> {
                   onChanged: (value) {
                     setState(() {
                       _hasDisability = value ?? false;
-                    });
+                    }); 
                   },
                 ),
                 const SizedBox(height: 16),

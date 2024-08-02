@@ -4,6 +4,9 @@ import '../widget/text_field.dart'; // Import your custom TextFieldInput widget
 import '../widget/button.dart'; // Import your custom Button widget
 
 class Criterias {
+  int passmark;
+  double allowed_CGPA;
+  double allowed_UACE_points;
   int attachmentToHall;
   int governmentStudent;
   int disabled;
@@ -14,6 +17,9 @@ class Criterias {
   int totalPoints;
 
   Criterias({
+    required this.passmark,
+    required this.allowed_CGPA,
+    required this.allowed_UACE_points,
     required this.attachmentToHall,
     required this.governmentStudent,
     required this.disabled,
@@ -27,6 +33,9 @@ class Criterias {
   // Convert a Criteria object into a Map
   Map<String, dynamic> toMap() {
     return {
+      'passmark': passmark,
+      'allowed_CGPA': allowed_CGPA,
+      'allowed_UACE_points': allowed_UACE_points,
       'attachmentToHall': attachmentToHall,
       'governmentStudent': governmentStudent,
       'disabled': disabled,
@@ -41,6 +50,9 @@ class Criterias {
   // Create a Criteria object from a Map
   factory Criterias.fromMap(Map<String, dynamic> map) {
     return Criterias(
+      passmark: map['passmark']?? 0,
+      allowed_CGPA: map['allowed_CGPA']?? 0,
+      allowed_UACE_points: map['allowed_UACE_points']?? 0,
       attachmentToHall: map['attachmentToHall'] ?? 0,
       governmentStudent: map['governmentStudent'] ?? 0,
       disabled: map['disabled'] ?? 0,
@@ -73,6 +85,9 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
   final _formKey = GlobalKey<FormState>();
   Criterias? _criteria;
 
+  final TextEditingController _passmarkController = TextEditingController();
+  final TextEditingController _allowed_CGPAController = TextEditingController();
+  final TextEditingController _allowed_UACE_pointsController = TextEditingController();
   final TextEditingController _attachmentToHallController = TextEditingController();
   final TextEditingController _governmentStudentController = TextEditingController();
   final TextEditingController _disabledController = TextEditingController();
@@ -97,6 +112,10 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
       if (snapshot.exists) {
         setState(() {
           _criteria = Criterias.fromMap(snapshot.data() as Map<String, dynamic>);
+
+          _passmarkController.text = _criteria!.passmark.toString();
+          _allowed_CGPAController.text = _criteria!.cgpa.toString();
+          _allowed_UACE_pointsController.text = _criteria!.cgpa.toString();
           _attachmentToHallController.text = _criteria!.attachmentToHall.toString();
           _governmentStudentController.text = _criteria!.governmentStudent.toString();
           _disabledController.text = _criteria!.disabled.toString();
@@ -109,6 +128,9 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
       } else {
         setState(() {
           _criteria = Criterias(
+            passmark: 0,
+            allowed_CGPA: 0,
+            allowed_UACE_points: 0,
             attachmentToHall: 0,
             governmentStudent: 0,
             disabled: 0,
@@ -128,6 +150,9 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
   void _calculateAndUpdateTotalPoints() {
     setState(() {
       _criteria = Criterias(
+        passmark:  int.tryParse(_passmarkController.text) ?? 0,
+        allowed_CGPA: double.tryParse(_allowed_CGPAController.text) ?? 0.0,
+        allowed_UACE_points: double.tryParse(_allowed_UACE_pointsController.text) ?? 0.0,
         attachmentToHall: int.tryParse(_attachmentToHallController.text) ?? 0,
         governmentStudent: int.tryParse(_governmentStudentController.text) ?? 0,
         disabled: int.tryParse(_disabledController.text) ?? 0,
@@ -184,6 +209,27 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
+                    TextFieldInput(
+                      textEditingController: _passmarkController,
+                      hintText: 'Passmark',
+                      textInputType: TextInputType.number,
+                      icon: Icons.verified_user,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
+                    TextFieldInput(
+                      textEditingController: _allowed_CGPAController,
+                      hintText: 'allowed_CGPA',
+                      textInputType: TextInputType.number,
+                      icon: Icons.grade,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
+                    TextFieldInput(
+                      textEditingController: _allowed_UACE_pointsController,
+                      hintText: 'allowed_UACE_points',
+                      textInputType: TextInputType.number,
+                      icon: Icons.school,
+                      onChanged: (value) => _calculateAndUpdateTotalPoints(),
+                    ),
                     TextFieldInput(
                       textEditingController: _attachmentToHallController,
                       hintText: 'Attachment to Hall',

@@ -114,8 +114,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
           _criteria = Criterias.fromMap(snapshot.data() as Map<String, dynamic>);
 
           _passmarkController.text = _criteria!.passmark.toString();
-          _allowed_CGPAController.text = _criteria!.cgpa.toString();
-          _allowed_UACE_pointsController.text = _criteria!.cgpa.toString();
+          _allowed_CGPAController.text = _criteria!.allowed_CGPA.toString();
+          _allowed_UACE_pointsController.text = _criteria!.allowed_UACE_points.toString();
           _attachmentToHallController.text = _criteria!.attachmentToHall.toString();
           _governmentStudentController.text = _criteria!.governmentStudent.toString();
           _disabledController.text = _criteria!.disabled.toString();
@@ -256,7 +256,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                     SizedBox(height: 16),
                     TextFieldInput(
                       textEditingController: _cgpaController,
-                      hintText: 'CGPA',
+                      hintText: 'CGPA REWARD',
                       textInputType: TextInputType.numberWithOptions(decimal: true),
                       icon: Icons.grade,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
@@ -264,7 +264,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                     SizedBox(height: 16),
                     TextFieldInput(
                       textEditingController: _uaceController,
-                      hintText: 'UACE',
+                      hintText: 'UACE REWARD',
                       textInputType: TextInputType.numberWithOptions(decimal: true),
                       icon: Icons.school,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),

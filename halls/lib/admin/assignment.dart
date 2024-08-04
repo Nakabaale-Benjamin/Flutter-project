@@ -13,20 +13,23 @@ class StudentAssignmentScreen extends StatefulWidget {
 class _StudentAssignmentScreenState extends State<StudentAssignmentScreen> {
   final FirestoreService _firestoreService = FirestoreService();
   String _statusMessage = '';
-
+  Color _statusColor = Colors.black;
   void _assignStudent(String uid) async {
     setState(() {
-      _statusMessage = 'Assigning student...';
+      _statusMessage = 'Assigning students...';
+      _statusColor = Colors.blue;
     });
 
     try {
       await _firestoreService.processAllStudents();
       setState(() {
-        _statusMessage = 'Student assigned successfully!';
+        _statusMessage = 'Students assigned successfully!';
+        _statusColor = Colors.green;
       });
     } catch (e) {
       setState(() {
         _statusMessage = 'Error assigning student: ${e.toString()}';
+        _statusColor = Colors.red;
       });
     }
   }
@@ -49,16 +52,16 @@ class _StudentAssignmentScreenState extends State<StudentAssignmentScreen> {
           children: <Widget>[
             MyButtons(
               onTap: () {
-                // Replace with the UID of the student you want to assign
                 _assignStudent('student_uid_here');
               },
               text: 'Assign Students'),
             const SizedBox(height: 20),
             Text(
               _statusMessage,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
+              style:  TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: _statusColor,
               ),
             ),
           ],

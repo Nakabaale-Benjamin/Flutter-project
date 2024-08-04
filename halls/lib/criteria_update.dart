@@ -173,7 +173,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
       try {
         await _firestore.collection(_collection).doc('current').set(_criteria!.toMap());
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Criteria updated successfully')),
+          SnackBar(content: Text('Criteria updated successfully', style: TextStyle(fontSize: 25.0),),
+                backgroundColor: Colors.blue,)
         );
       } catch (e) {
         print('Error updating criteria: $e');
@@ -185,7 +186,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
     try {
       await _firestore.collection(_collection).doc('current').delete();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Criteria deleted successfully')),
+        SnackBar(content: Text('Criteria deleted successfully', style: TextStyle(fontSize: 25.0),),
+                backgroundColor: Colors.blue,)
       );
       // Optionally, reset form fields or navigate away
     } catch (e) {
@@ -209,6 +211,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
+                    const Text("Passmark", style: TextStyle(color: Colors.blue, fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _passmarkController,
                       hintText: 'Passmark',
@@ -216,6 +219,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       icon: Icons.verified_user,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
+  
+                    const Text("Required CGPA", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _allowed_CGPAController,
                       hintText: 'allowed_CGPA',
@@ -223,6 +228,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       icon: Icons.grade,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
+                     
+                    const Text("Required UACE points", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _allowed_UACE_pointsController,
                       hintText: 'allowed_UACE_points',
@@ -230,6 +237,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       icon: Icons.school,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
+                     
+                    const Text("Attachment to hall reward", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _attachmentToHallController,
                       hintText: 'Attachment to Hall',
@@ -237,7 +246,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       icon: Icons.attach_file,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
-                    SizedBox(height: 16),
+                    
+                    const Text("Government Student Reward", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _governmentStudentController,
                       hintText: 'Government Student',
@@ -245,7 +255,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       icon: Icons.account_balance,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
-                    SizedBox(height: 16),
+                    
+                    const Text("Disability Reward", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _disabledController,
                       hintText: 'Disabled',
@@ -253,7 +264,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       icon: Icons.accessibility,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
-                    SizedBox(height: 16),
+                    
+                    const Text("CGPA reward", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _cgpaController,
                       hintText: 'CGPA REWARD',
@@ -261,7 +273,8 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       icon: Icons.grade,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
-                    SizedBox(height: 16),
+                    
+                    const Text("UACE Reward", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _uaceController,
                       hintText: 'UACE REWARD',
@@ -269,14 +282,16 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       icon: Icons.school,
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
-                    SizedBox(height: 16),
+                    
+                    const Text("Continuing Student Reward", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _continuingResidentController,
                       hintText: 'Continuing Student',
                       textInputType: TextInputType.number,
                       icon: Icons.home,
                 ),
-                    SizedBox(height: 16),
+                  
+                    const Text("Private Student Reward", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _privateStudentController,
                       hintText: 'Private Student',
@@ -285,6 +300,7 @@ class _CriteriaScreenState extends State<CriteriaScreen> {
                       onChanged: (value) => _calculateAndUpdateTotalPoints(),
                     ),
                     SizedBox(height: 16),
+                    const Text("Total Points", style: TextStyle(color: Colors.blue,fontSize: 20.0,fontWeight: FontWeight.bold),),
                     TextFieldInput(
                       textEditingController: _totalPointsController,
                       hintText: 'Total Points',

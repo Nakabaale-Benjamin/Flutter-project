@@ -22,7 +22,8 @@ class Criterias {
 
   void calculateTotalPoints() {
     int cgpaPoints = (cgpa >= 3.5) ? 20 : 0;
-    totalPoints = attachmentToHall + governmentStudent + disabled + cgpaPoints + continuingResident + privateStudent;
+    int uacePoints =(uace>=10) ? 20 :0;
+    totalPoints = attachmentToHall + governmentStudent + disabled + cgpaPoints + continuingResident + privateStudent+ uacePoints;
   }
 
   // Convert a Criteria object into a Map
